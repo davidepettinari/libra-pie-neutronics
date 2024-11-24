@@ -685,7 +685,7 @@ def build_vault_model(settings=openmc.Settings(), tallies=openmc.Tallies(),
 
     # The foundation underneath all basement lab rooms
     Region_21 = -Surface_94 & -Surface_49  
-    Cell_21 = openmc.Cell(fill=Concrete, region=Region_21) 
+    foundation = openmc.Cell(fill=Concrete, region=Region_21) 
 
     #
     # 36
@@ -968,64 +968,6 @@ def build_vault_model(settings=openmc.Settings(), tallies=openmc.Tallies(),
     Region_70 = -Surface_107 | -Surface_108 | -Surface_109 | -Surface_110  
     Cell_70 = openmc.Cell(fill=Lead, region=Region_70) 
 
-    # Portland Iron Concrete Shield in Vault
-    # 111
-    # Surface_111 = openmc.model.RectangularParallelepiped(1295.0, 1545.0, 518.0, 568.0, 10.16, 160.16)
-
-    # # 112
-    # Surface_112 = openmc.model.RectangularParallelepiped(1495.0, 1545.0, 568.0, 668.0, 10.16, 160.16)
-
-    # # 113
-    # Surface_113 = openmc.model.RectangularParallelepiped(1295.0, 1345.0, 568.0, 668.0, 10.16, 160.16)
-
-    # # 114
-    # Surface_114 = openmc.model.RectangularParallelepiped(1295.0, 1545.0, 518.0, 668.0, 160.16, 210.16)
-
-    # # Portland Concrete Brick Cyclotron Target Chamber
-    # Region_71 = -Surface_111 | -Surface_112 | -Surface_113 | -Surface_114  
-    # Cell_71 = openmc.Cell(fill=IronConcrete, region=Region_71) 
-
-    # # 116
-    # Surface_116 = openmc.model.RightCircularCylinder((1422.0, 799.62, 0.0), 2.0, 50.0, axis='z')
-
-    # # 117
-    # Surface_117 = openmc.model.RightCircularCylinder((1422.0, 799.62, 148.0), 2.0, 50.0, axis='z')
-
-    # # 118
-    # Surface_118 = openmc.model.RectangularParallelepiped(1397.0, 1447.0, 749.62, 849.62, 45.0, 55.0)
-
-    # # 119
-    # Surface_119 = openmc.model.RightCircularCylinder((1422.0, 799.62, 2.0), 146.0, 46.0, axis='z')
-
-    # # 120
-    # Surface_120 = openmc.model.RectangularParallelepiped(1395.0, 1449.0, 749.62, 849.62, 43.0, 57.0)
-
-    # # 121
-    # Surface_121 = openmc.model.RightCircularCylinder((1422.0, 799.62, 2.0), 146.0, 48.0, axis='z')
-
-    # # Cyclotron
-    # Region_72 = -Surface_121 & +Surface_119 | -Surface_120 & +Surface_118 | -Surface_117 | -Surface_116  
-    # Cell_72 = openmc.Cell(fill=None, region=Region_72) 
-
-
-
-    # The main air chamber of Room III
-    # the north Vault shield wall
-    # the south Vault shield wall
-    # the east Vault shield wall
-    # the west Vault shield wall
-    # the top (ceiling) Vault shield wall
-    # the bottom (floor) Vault shield wall
-    # the main vault door
-    # the Ricorad shields within the Vault entrance
-    # the I-beam support for the Vault door
-    # the north CMU wall with DANTE beamline cutout
-    # the iron-brick piles around selection magnet 
-    # the bottom selection magnet
-    # the top selection magnet
-    # the selection magnet support stand
-    # DT Generator shield universe region
-
     if overall_exclusion_region:
         Region_28 = -Surface_24 & -Surface_49 & \
             ~North_vault_wall_reg & ~Vault_north_wall_ext_reg & \
@@ -1057,39 +999,10 @@ def build_vault_model(settings=openmc.Settings(), tallies=openmc.Tallies(),
             ~DANTE_vault_bot_magnet_reg & \
             ~DANTE_vault_top_magnet_reg & \
             ~DANTE_vault_mag_stand_reg
+ 
+    Vault_air_cell = openmc.Cell(fill=Air, region=Region_28) 
 
-        # (+Surface_23 | +Surface_49 | -Surface_11 | -Surface_102) & \
-        # (+Surface_36 | +Surface_49) & \
-        # (+Surface_16 | -Surface_48 | +Surface_49) & \
-        # (+Surface_39 | -Surface_38) & \
-        # (+Surface_37 | +Surface_49) & \
-        # (+Surface_12 | +Surface_48) & \
-        # (+Surface_13 | +Surface_14 | +Surface_15) & \
-        # +Surface_17 & +Surface_18 & \
-        # (+Surface_82 & +Surface_83 & +Surface_84) & \
-        # (+Surface_22 | +Surface_48 | -Surface_11) & \
-        # +Surface_9 & +Surface_10 & \
-        # (+Surface_30 | -Surface_28) & \
-        # (+Surface_35 | -Surface_28) & \
-        # (+Surface_27 | -Surface_21) & +Surface_29 & +Surface_31 & +Surface_33 & +Surface_34 & \
-        # (-DT_BPE_west_xplane | +DT_BPE_east_xplane | -DT_BPE_south_yplane | +DT_BPE_north_yplane \
-        # 				| -DT_BPE_bot_zplane | +DT_BPE_top_zplane)
-        # +DT_BPE_shield_rpp
-        # (+DT_BPE_shield_rpp | +DT_conc_shield_rpp | +DT_enclosure_rpp)
-        # (-DT_conc_west_xplane | +DT_conc_east_xplane | -DT_conc_south_yplane | +DT_conc_north_yplane \
-        # 				| -DT_conc_bot_zplane | +DT_conc_top_zplane)
-        # +DT_conc_shield_rpp 
-        # (+DT_enclosure_rpp) & (-DT_enclosure_rpp | +DT_conc_shield_rpp) & (-DT_BPE_shield_rpp | +DT_conc_shield_rpp)
-        # & (+DT_BPE_shield_rpp | +DT_conc_shield_rpp | +DT_enclosure_rpp) # & \
-    # excluding cyclotron target chamber
-    # cyclotron 
-        # (+Surface_111 & +Surface_112 & +Surface_113 & +Surface_114) & \
-        # (+Surface_121 | -Surface_119) & (+Surface_120 | -Surface_118) & +Surface_117 & +Surface_116 & \
-        # ~Region_72  
-    Cell_28 = openmc.Cell(fill=Air, region=Region_28) 
 
-    ##### s_wall_lev1_w Western portion of south wall of NW13 on level 1 (first floor)
-    # Cell 8 is control room south wall
 
 
 
@@ -1200,27 +1113,29 @@ def build_vault_model(settings=openmc.Settings(), tallies=openmc.Tallies(),
     Cell_900 = openmc.Cell(fill=None, region=Region_1) 
 
 
-    Cells = [Cell_1000, Cell_900, Cell_2, Cell_3, Cell_4, Cell_5, Cell_6, Cell_7, 
-        Cell_8, Cell_9, Cell_10, Cell_11, Vault_door_cell, 
-        Vault_door_shield_n_pillar_cell, Vault_door_shield_s_pillar_cell, 
+    Cells = [Cell_1000, 
+        # Cell_900, 
+        Vault_door_cell, Vault_door_shield_n_pillar_cell, Vault_door_shield_s_pillar_cell, 
         DANTE_vault_w_shield_cell, DANTE_vault_e_shield_cell, 
-        Vault_north_wall_ext_cell, Cell_18, Cell_19, Cell_20, Cell_21, 
+        Vault_north_wall_ext_cell, 
+        # Cell_19, ###
+        foundation, 
         South_vault_wall_cell, East_vault_wall_cell, West_vault_wall_cell, 
         Vault_ceiling_cell, Vault_floor_cell, North_vault_wall_cell, 
-        Cell_29, Cell_30, Cell_31, Cell_32, Cell_33, 
-        I_beam_cell, Cell_35, Cell_36, Cell_37, Cell_38, Cell_39, Cell_40, Cell_41, 
-        Cell_42, Cell_43, Cell_44, Cell_45, Cell_46, Cell_47, Cell_48, Cell_49, Cell_50, 
-        Cell_51, Cell_52, Cell_54, Cell_55, Cell_56, Cell_57, Cell_58, Cell_59, 
-        Cell_60, Cell_61, Cell_62, DANTE_vault_bot_magnet_cell, DANTE_vault_top_magnet_cell, 
-        DANTE_vault_mag_stand_cell, Cell_69, Cell_70, 
-        # Cell_71, Cell_72, 
-        # DT_BPE_shield_cell,
-        # DT_enclosure_cell, DT_conc_shield_cell,
-        # DT_enclosure_cell, DT_BPE_shield_cell,
-        # test_cell,
-        Cell_28, Soil_cell, south_wall_lev1_cell, east_window_cell,
-        west_window_cell, air_hand_cell, s_wall_ext_cell, w_wall_lev1_cell,
-        lev1_ceil_cell] 
+        # Cell_29, Cell_30, Cell_31, Cell_32, Cell_33, 
+        I_beam_cell, 
+        # Cell_35, Cell_36, Cell_37, Cell_38, Cell_39, Cell_40, Cell_41, 
+        # Cell_42, Cell_43, Cell_44, Cell_45, Cell_46, Cell_47, Cell_48, Cell_49, Cell_50, 
+        # Cell_51, Cell_52, Cell_54, Cell_55, Cell_56, Cell_57, Cell_58, Cell_59, 
+        # Cell_60, Cell_61, Cell_62, 
+        DANTE_vault_bot_magnet_cell, DANTE_vault_top_magnet_cell, 
+        DANTE_vault_mag_stand_cell,  
+        Vault_air_cell, 
+        # Soil_cell, 
+        # south_wall_lev1_cell, east_window_cell,
+        # west_window_cell, air_hand_cell, s_wall_ext_cell, w_wall_lev1_cell,
+        # lev1_ceil_cell
+        ] 
     
     print(Cells)
     Cells += added_cells
